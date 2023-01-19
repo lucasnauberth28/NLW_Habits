@@ -12,7 +12,7 @@ function App() {
 
   return (
     <div>
-      <Habit completed={5} />
+      <Habit completed={9} />
     </div>
    
   )
