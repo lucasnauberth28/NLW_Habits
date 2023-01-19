@@ -1,14 +1,25 @@
+// Arquivos gerais
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
-import './App.css'
+
+// Components
 import { Habit } from './components/Habit'
+// Styles
+import './styles/global.css'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
-   <Habit completed={3} />
+    <div>
+      <Habit completed={5} />
+    </div>
+   
   )
 }
 
 export default App
+
+
+// Componente é o item criado para reaproveitar/isolar um item X
+// Propriedade uma informação para alterar x ou y
