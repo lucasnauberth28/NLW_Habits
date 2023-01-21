@@ -30,7 +30,7 @@ export function Summary() {
 
                 {amountOfDaysToFill > 0 && Array.from({ length: amountOfDaysToFill}).map((_, i) => {
                     return(
-                        <div key={i} className="bg-zinc-900 w-10 h-10 rounded-lg border-zinc-800 opacity-40 cursor-not-allowed"></div>
+                        <div key={i} className="bg-zinc-900 w-10 h-10 rounded-lg border-zinc-800 opacity-40 cursor-not-allowed"/>
                     );
                 })}
                 
