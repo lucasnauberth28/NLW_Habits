@@ -8,8 +8,11 @@ const amountOfDaysToFill = minSummary - datesFromYearStart.length;
 
 import { Habitday, day_size } from "../components/HabitDay";
 import { Header } from "../components/Header";
+import { useNavigation } from "@react-navigation/native";
 
 export function Home(){
+
+    const { navigate } = useNavigation();
     return(
         <View className="flex-1 bg-background px-8 pt-16">
             <Header />
@@ -33,7 +36,9 @@ export function Home(){
                     {
                         datesFromYearStart.map((date) => (
                         <Habitday 
-                            key={date.toISOString()}/>
+                            key={date.toISOString()}
+                            onPress={() => navigate('habit', {date: date.toISOString() })}
+                            />
                         ))
                     }
 
@@ -41,7 +46,7 @@ export function Home(){
                         amountOfDaysToFill > 0 && Array
                         .from({length: amountOfDaysToFill})
                         .map((_, i) => (
-                            <View
+                            <View key={i}
                                 className="bg-zinc-900 rounded-lg border-2 m-1 border-zinc-800 opacity-40"
                                 style={{width:day_size, height:day_size}}>
                             </View>
