@@ -3,12 +3,22 @@ import { FormEvent, useState } from  'react';
 import * as Checkbox from  '@radix-ui/react-checkbox';
 
 const avaiable = [ 'Domingo', 'Segunda-feira' , 'Terça-feira' , 'Quarta-feira' , 'Quinta-feira' , 'Sexta-feira' , 'Sábado']
+const [weekDays, setWeekDays] = useState<number[]>([])
 
 export function NewHabitForm() {
     const [title, setTitle] = useState('')
 
     function createNewHabit(event: FormEvent){
         event.preventDefault();
+    }
+
+    function handleToggleWD(weekday: number, shouldAddToList: boolean)
+    {  
+        
+
+
+        
+
     }
     
     return(
