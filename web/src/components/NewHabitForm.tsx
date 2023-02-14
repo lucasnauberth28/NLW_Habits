@@ -2,23 +2,28 @@ import { Check } from "phosphor-react";
 import { FormEvent, useState } from  'react';
 import * as Checkbox from  '@radix-ui/react-checkbox';
 
-const avaiable = [ 'Domingo', 'Segunda-feira' , 'Terça-feira' , 'Quarta-feira' , 'Quinta-feira' , 'Sexta-feira' , 'Sábado']
-const [weekDays, setWeekDays] = useState<number[]>([])
+const avaiable = [ 'Domingo', 'Segunda-feira' , 'Terça-feira' , 'Quarta-feira' , 'Quinta-feira' , 'Sexta-feira' , 'Sábado'];
 
 export function NewHabitForm() {
-    const [title, setTitle] = useState('')
+    const [title, setTitle] = useState('');
+    const [weekDays, setWeekDays] = useState<number[]>([]);
 
     function createNewHabit(event: FormEvent){
         event.preventDefault();
     }
 
-    function handleToggleWD(weekday: number, shouldAddToList: boolean)
+    function handleToggleWD(weekday: number)
     {  
-        
+        if(weekDays.includes(weekday))
+        {
+            const weekDaysWithRemovedOne = weekDays.filter(day => day != weekday)
 
+            setWeekDays(weekDaysWithRemovedOne);
+        } else{
+            const weekDaysWithAddedOne = [...weekDays, weekday]
 
-        
-
+            setWeekDays(weekDaysWithAddedOne);
+        }
     }
     
     return(
@@ -41,10 +46,12 @@ export function NewHabitForm() {
 
             <div className="flex flex-col gap-2 mt-3">
                 {
-                    avaiable.map(weekDay => {
+                    avaiable.map((weekDay, index) => {
                         return(
                             <Checkbox.Root 
+                                key={weekDay}
                                 className='flex items-center gap-3 group'
+                                onCheckedChange={() => {handleToggleWD(index)}}
                             >
                                 <div className='h-8 w-8 rounded-lg flex items-center justify-center bg-zinc-900 border-2 border-zinc-800 group-data-[state=checked]:bg-green-500 group-data-[state=checked]:border-green-400'>
                                     <Checkbox.Indicator>

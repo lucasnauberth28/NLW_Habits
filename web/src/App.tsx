@@ -1,5 +1,6 @@
 // Styles
 import './styles/global.css'
+import './lib/dayjs'
 
 // Arquivos gerais
 // import { useState } from 'react'
