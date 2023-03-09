@@ -1,18 +1,56 @@
-import { Text, View, ScrollView } from "react-native";
+import { useState, useEffect } from 'react'
+import { Text, View, ScrollView, Alert } from "react-native";
 import { generateDatesFromYearBeginning } from '../utils/generate-dates';
+
+import dayjs from 'dayjs';
+import { api } from "../lib/axios";
 
 const weekDays = ['D','S','T','Q','Q','S','S'];
 const datesFromYearStart = generateDatesFromYearBeginning();
 const minSummary = 18 * 5;
 const amountOfDaysToFill = minSummary - datesFromYearStart.length;
 
+type SummaryProps = Array<{
+    id: string;
+    date: string;
+    amount: string;
+    completed: string;
+}> 
+
 import { Habitday, day_size } from "../components/HabitDay";
 import { Header } from "../components/Header";
+import { Loading } from "../components/Loading";
 import { useNavigation } from "@react-navigation/native";
 
 export function Home(){
 
+    const [loading, setLoading] = useState(true);
+    const [summary, setSummary] = useState<SummaryProps | null>(null);
+
     const { navigate } = useNavigation();
+
+    async function fetchData(){
+        try{
+            setLoading(true);
+            const response = await api.get('/summary');
+            console.log("teste");
+            setSummary(response.data);
+        } catch (error){
+            Alert.alert('Ops', 'não foi possível carregar')
+            console.log(error);
+        } finally{
+            setLoading(false);
+        }  
+    }
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    if(loading){
+        return <Loading />
+    }
+
     return(
         <View className="flex-1 bg-background px-8 pt-16">
             <Header />
@@ -32,27 +70,37 @@ export function Home(){
             </View>
 
             <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{paddingBottom: 100}}>
-                <View className="flex-row flex-wrap">
-                    {
-                        datesFromYearStart.map((date) => (
-                        <Habitday 
-                            key={date.toISOString()}
-                            onPress={() => navigate('habit', {date: date.toISOString() })}
-                            />
-                        ))
-                    }
+                {
+                    summary &&
+                    <View className="flex-row flex-wrap">
+                        {
+                            datesFromYearStart.map((date) => {
+                                const dayWithHabits = summary.find(day => {
+                                    return dayjs(date).isSame(day.date, 'day')
+                                })
 
-                    {
-                        amountOfDaysToFill > 0 && Array
-                        .from({length: amountOfDaysToFill})
-                        .map((_, i) => (
-                            <View key={i}
-                                className="bg-zinc-900 rounded-lg border-2 m-1 border-zinc-800 opacity-40"
-                                style={{width:day_size, height:day_size}}>
-                            </View>
-                        ))
-                    }
-                </View>
+                                return(
+                                    <Habitday 
+                                    key={date.toISOString()}
+                                    onPress={() => navigate('habit', {date: date.toISOString() })}
+                                    /> 
+                            )
+                            
+                            })
+                        }
+
+                        {
+                            amountOfDaysToFill > 0 && Array
+                            .from({length: amountOfDaysToFill})
+                            .map((_, i) => (
+                                <View key={i}
+                                    className="bg-zinc-900 rounded-lg border-2 m-1 border-zinc-800 opacity-40"
+                                    style={{width:day_size, height:day_size}}>
+                                </View>
+                            ))
+                        }
+                    </View>
+                }
             </ScrollView>
 
         </View>
